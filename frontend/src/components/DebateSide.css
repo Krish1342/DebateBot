@@ -1,0 +1,85 @@
+.debate-side {
+  padding: 1.5rem 2rem;
+}
+
+.debate-side.proposition {
+  animation: slideInLeft 0.6s ease-out;
+}
+
+.debate-side.opposition {
+  animation: slideInRight 0.6s ease-out;
+}
+
+.side-header {
+  margin-bottom: 1.75rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.5rem 1.15rem;
+  border-radius: 25px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.85rem;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+
+.badge.proposition {
+  background: rgba(6, 182, 212, 0.12);
+  color: var(--cyan-primary);
+  border: 1px solid rgba(6, 182, 212, 0.25);
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.1);
+}
+
+.badge.opposition {
+  background: rgba(236, 72, 153, 0.12);
+  color: var(--pink-primary);
+  border: 1px solid rgba(236, 72, 153, 0.25);
+  box-shadow: 0 0 20px rgba(236, 72, 153, 0.1);
+}
+
+.badge:hover {
+  transform: scale(1.02);
+}
+
+.side-title {
+  font-family: var(--font-heading);
+  font-size: 1.65rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  transition: all 0.3s ease;
+}
+
+.side-title.proposition {
+  color: var(--cyan-light);
+  text-shadow: 0 0 30px rgba(6, 182, 212, 0.3);
+}
+
+.side-title.opposition {
+  color: var(--pink-light);
+  text-shadow: 0 0 30px rgba(236, 72, 153, 0.3);
+}
+
+.arguments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .debate-side {
+    padding: 1.25rem;
+  }
+
+  .debate-side.proposition,
+  .debate-side.opposition {
+    animation: fadeInUp 0.5s ease-out;
+  }
+
+  .side-title {
+    font-size: 1.35rem;
+  }
+}

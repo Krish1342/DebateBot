@@ -1,0 +1,289 @@
+.argument-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1.35rem;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.argument-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.argument-card.proposition::before {
+  background: var(--gradient-cyan);
+}
+
+.argument-card.opposition::before {
+  background: var(--gradient-pink);
+}
+
+.argument-card:hover {
+  background: var(--bg-card-hover);
+  transform: translateY(-4px);
+}
+
+.argument-card:hover::before {
+  opacity: 1;
+}
+
+.argument-card.proposition:hover {
+  border-color: rgba(6, 182, 212, 0.35);
+  box-shadow: 0 10px 40px rgba(6, 182, 212, 0.12),
+    0 0 0 1px rgba(6, 182, 212, 0.1);
+}
+
+.argument-card.opposition:hover {
+  border-color: rgba(236, 72, 153, 0.35);
+  box-shadow: 0 10px 40px rgba(236, 72, 153, 0.12),
+    0 0 0 1px rgba(236, 72, 153, 0.1);
+}
+
+.argument-card.expanded {
+  background: var(--bg-card-hover);
+}
+
+.argument-card.expanded::before {
+  opacity: 1;
+}
+
+.argument-card.proposition.expanded {
+  border-color: rgba(6, 182, 212, 0.45);
+  box-shadow: 0 15px 50px rgba(6, 182, 212, 0.15),
+    0 0 0 1px rgba(6, 182, 212, 0.15);
+}
+
+.argument-card.opposition.expanded {
+  border-color: rgba(236, 72, 153, 0.45);
+  box-shadow: 0 15px 50px rgba(236, 72, 153, 0.15),
+    0 0 0 1px rgba(236, 72, 153, 0.15);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.85rem;
+}
+
+.stage-label {
+  font-family: var(--font-heading);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.stage-label.proposition {
+  color: var(--cyan-primary);
+}
+
+.stage-label.opposition {
+  color: var(--pink-primary);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.status-dot.proposition {
+  background: var(--cyan-primary);
+  box-shadow: 0 0 10px var(--cyan-glow), 0 0 20px var(--cyan-glow);
+}
+
+.status-dot.opposition {
+  background: var(--pink-primary);
+  box-shadow: 0 0 10px var(--pink-glow), 0 0 20px var(--pink-glow);
+}
+
+.card-content {
+  margin-bottom: 1.15rem;
+  overflow: hidden;
+}
+
+.argument-text {
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  transition: all 0.3s ease;
+}
+
+/* Text expand animation */
+.argument-card.expanded .argument-text {
+  animation: expandText 0.4s ease-out;
+}
+
+@keyframes expandText {
+  from {
+    opacity: 0.7;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.read-more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: transparent;
+  border: none;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0.5rem 0;
+  font-family: var(--font-body);
+  font-weight: 500;
+  position: relative;
+}
+
+.read-more-btn::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  transition: width 0.3s ease;
+}
+
+.read-more-btn.proposition {
+  color: var(--text-muted);
+}
+
+.read-more-btn.proposition::after {
+  background: var(--cyan-primary);
+}
+
+.read-more-btn.proposition:hover {
+  color: var(--cyan-primary);
+}
+
+.read-more-btn.proposition:hover::after {
+  width: calc(100% - 1.5rem);
+}
+
+.read-more-btn.opposition {
+  color: var(--text-muted);
+}
+
+.read-more-btn.opposition::after {
+  background: var(--pink-primary);
+}
+
+.read-more-btn.opposition:hover {
+  color: var(--pink-primary);
+}
+
+.read-more-btn.opposition:hover::after {
+  width: calc(100% - 1.5rem);
+}
+
+.arrow {
+  font-size: 1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-block;
+}
+
+.read-more-btn:hover .arrow {
+  transform: translateX(4px);
+}
+
+.argument-card.expanded .arrow {
+  transform: rotate(-90deg);
+}
+
+.argument-card.expanded .read-more-btn:hover .arrow {
+  transform: rotate(-90deg) translateX(2px);
+}
+
+/* Staggered animation for proposition cards - slide from left */
+.argument-card.proposition:nth-child(1) {
+  animation: slideInFromLeft 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.15s backwards;
+}
+.argument-card.proposition:nth-child(2) {
+  animation: slideInFromLeft 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.35s backwards;
+}
+.argument-card.proposition:nth-child(3) {
+  animation: slideInFromLeft 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.55s backwards;
+}
+
+/* Staggered animation for opposition cards - slide from right */
+.argument-card.opposition:nth-child(1) {
+  animation: slideInFromRight 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.15s
+    backwards;
+}
+.argument-card.opposition:nth-child(2) {
+  animation: slideInFromRight 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.35s
+    backwards;
+}
+.argument-card.opposition:nth-child(3) {
+  animation: slideInFromRight 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.55s
+    backwards;
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-120px) scale(0.9) rotateY(10deg);
+    filter: blur(4px);
+  }
+  60% {
+    opacity: 0.8;
+    transform: translateX(10px) scale(1.01) rotateY(-2deg);
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1) rotateY(0deg);
+    filter: blur(0px);
+  }
+}
+
+@keyframes slideInFromRight {
+  0% {
+    opacity: 0;
+    transform: translateX(120px) scale(0.9) rotateY(-10deg);
+    filter: blur(4px);
+  }
+  60% {
+    opacity: 0.8;
+    transform: translateX(-10px) scale(1.01) rotateY(2deg);
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1) rotateY(0deg);
+    filter: blur(0px);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .argument-card {
+    padding: 1.15rem;
+    border-radius: 12px;
+  }
+
+  .argument-text {
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  .argument-card:hover {
+    transform: translateY(-2px);
+  }
+}
