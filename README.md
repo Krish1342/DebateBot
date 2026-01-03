@@ -2,6 +2,8 @@
 
 An intelligent debate platform powered by LLMs that generates compelling arguments on both sides of any motion using LangGraph and FastAPI.
 
+**Status**: ✅ Production Ready | **Version**: 1.0.0 | **License**: MIT
+
 ## ✨ Features
 
 - **Dual-sided Debates**: Generate comprehensive arguments from both Proposition and Opposition sides
