@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import DebateInput from "./components/DebateInput";
 import DebateArena from "./components/DebateArena";
 import LiveDebateArena from "./components/LiveDebateArena";
+import Scoring from "./components/Scoring";
 import "./App.css";
 
 function App() {
@@ -99,6 +100,7 @@ function App() {
           }
         />
         <Route path="/live-arena" element={<LiveDebateArena />} />
+        <Route path="/scoring" element={<Scoring />} />
       </Routes>
     </div>
   );

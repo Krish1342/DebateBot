@@ -1,19 +1,20 @@
 .round-tabs {
     display: flex;
-    gap: 0.5rem;
-    background: var(--bg-card);
-    padding: 0.35rem;
-    border-radius: 30px;
+    gap: 0.35rem;
+    background: rgba(17, 24, 39, 0.7);
+    padding: 0.4rem;
+    border-radius: 50px;
     border: 1px solid var(--border-color);
+    backdrop-filter: blur(10px);
 }
 
 .round-tab {
     font-family: var(--font-body);
     font-size: 0.9rem;
     font-weight: 500;
-    padding: 0.65rem 1.75rem;
+    padding: 0.7rem 2rem;
     border: none;
-    border-radius: 25px;
+    border-radius: 50px;
     background: transparent;
     color: var(--text-secondary);
     cursor: pointer;
@@ -23,14 +24,14 @@
 
 .round-tab:hover:not(.active) {
     color: var(--text-primary);
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .round-tab.active {
     background: var(--gradient-cyan);
     color: white;
     font-weight: 600;
-    box-shadow: 0 4px 15px var(--cyan-glow);
+    box-shadow: 0 4px 20px var(--cyan-glow);
 }
 
 .round-tab.completed:not(.active) {
@@ -38,25 +39,23 @@
 }
 
 .round-tab.completed:not(.active)::after {
-    content: "";
+    content: "✓";
     position: absolute;
     top: 50%;
-    right: 8px;
+    right: 10px;
     transform: translateY(-50%);
-    width: 6px;
-    height: 6px;
-    background: var(--cyan-primary);
-    border-radius: 50%;
+    font-size: 0.7rem;
+    color: var(--cyan-primary);
 }
 
 /* Responsive */
-@media (max-width: 500px) {
+@media (max-width: 600px) {
     .round-tabs {
-        padding: 0.25rem;
+        padding: 0.3rem;
     }
 
     .round-tab {
-        padding: 0.5rem 1rem;
+        padding: 0.55rem 1.25rem;
         font-size: 0.8rem;
     }
 }
