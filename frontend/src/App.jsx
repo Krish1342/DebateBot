@@ -1,6 +1,9 @@
 import { useState } from "react";
+import { Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
 import DebateInput from "./components/DebateInput";
 import DebateArena from "./components/DebateArena";
+import LiveDebateArena from "./components/LiveDebateArena";
 import "./App.css";
 
 function App() {
@@ -42,49 +45,61 @@ function App() {
 
   return (
     <div className="app">
-      <header className="header">
-        <h1 className="title">The AI Debate</h1>
-        {debateData && <p className="subtitle">{debateData.topic}</p>}
-        {!debateData && !isLoading && (
-          <p className="subtitle">Enter a topic to start the debate</p>
-        )}
-      </header>
+      <Navbar />
 
-      <main className="main-content">
-        {!debateData && !isLoading && (
-          <DebateInput onSubmit={handleStartDebate} />
-        )}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <header className="header">
+                <h1 className="title">The AI Debate</h1>
+                {debateData && <p className="subtitle">{debateData.topic}</p>}
+                {!debateData && !isLoading && (
+                  <p className="subtitle">Enter a topic to start the debate</p>
+                )}
+              </header>
 
-        {isLoading && (
-          <div className="loading-container">
-            <div className="loading-spinner"></div>
-            <p className="loading-text">Generating debate arguments...</p>
-            <p className="loading-subtext">
-              This may take a moment as our AI debaters prepare their arguments
-            </p>
-          </div>
-        )}
+              <main className="main-content">
+                {!debateData && !isLoading && (
+                  <DebateInput onSubmit={handleStartDebate} />
+                )}
 
-        {error && (
-          <div className="error-container">
-            <p className="error-text">Error: {error}</p>
-            <button onClick={handleReset} className="retry-btn">
-              Try Again
-            </button>
-          </div>
-        )}
+                {isLoading && (
+                  <div className="loading-container">
+                    <div className="loading-spinner"></div>
+                    <p className="loading-text">Generating debate arguments...</p>
+                    <p className="loading-subtext">
+                      This may take a moment as our AI debaters prepare their arguments
+                    </p>
+                  </div>
+                )}
 
-        {debateData && !isLoading && (
-          <>
-            <DebateArena data={debateData} />
-            <div className="reset-container">
-              <button onClick={handleReset} className="new-debate-btn">
-                Start New Debate
-              </button>
-            </div>
-          </>
-        )}
-      </main>
+                {error && (
+                  <div className="error-container">
+                    <p className="error-text">Error: {error}</p>
+                    <button onClick={handleReset} className="retry-btn">
+                      Try Again
+                    </button>
+                  </div>
+                )}
+
+                {debateData && !isLoading && (
+                  <>
+                    <DebateArena data={debateData} />
+                    <div className="reset-container">
+                      <button onClick={handleReset} className="new-debate-btn">
+                        Start New Debate
+                      </button>
+                    </div>
+                  </>
+                )}
+              </main>
+            </>
+          }
+        />
+        <Route path="/live-arena" element={<LiveDebateArena />} />
+      </Routes>
     </div>
   );
 }

@@ -15,6 +15,8 @@ origins = [
     "http://127.0.0.1:5500",
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+    "http://localhost:5174",
+    "http://127.0.0.1:5174",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
 ]
@@ -143,3 +145,106 @@ async def run_debate(request: DebateRequest):
 @app.get("/api/health")
 def health_check():
     return {"status": "healthy"}
+
+
+class LiveDebateRequest(BaseModel):
+    topic: str
+    user_argument: str
+    round: str  # "opening", "rebuttal", "closing"
+    argument_history: list = []  # Previous arguments in the debate
+
+
+class LiveDebateResponse(BaseModel):
+    counter_argument: str
+    points: list
+
+
+@app.post("/api/live-counter")
+async def generate_counter(request: LiveDebateRequest):
+    """Generate AI counter-argument for the user's position in live debate."""
+    topic = request.topic
+    user_argument = request.user_argument
+    round_type = request.round
+    history = request.argument_history
+    
+    # Build history context
+    history_context = ""
+    if history:
+        history_context = "\n\nPREVIOUS EXCHANGES:\n"
+        for item in history:
+            if item.get("type") == "user":
+                history_context += f"USER'S ARGUMENT: {item.get('text', '')}\n"
+            else:
+                history_context += f"AI COUNTER: {item.get('text', '')}\n"
+    
+    # Generate counter-argument based on round
+    if round_type == "opening":
+        prompt = f"""You are an expert AI debater analyzing and countering arguments.
+Motion: {topic}
+Your Role: Opposition (countering the user's position)
+
+USER'S OPENING ARGUMENT:
+{user_argument}
+{history_context}
+
+Generate a compelling counter-argument (max 200 words) that:
+1. Acknowledges the user's point briefly
+2. Presents clear counter-evidence or reasoning  
+3. Explains why the opposing view is stronger
+
+Be analytical, respectful, and persuasive. Write in a formal debate style."""
+
+    elif round_type == "rebuttal":
+        prompt = f"""You are an expert AI debater in a rebuttal round.
+Motion: {topic}
+Your Role: Opposition (countering the user's position)
+
+USER'S REBUTTAL ARGUMENT:
+{user_argument}
+{history_context}
+
+Generate a sharp rebuttal (max 200 words) that:
+1. Directly addresses the user's specific points
+2. Identifies weaknesses in their reasoning
+3. Reinforces your counter-position with evidence
+
+Be analytical and point out logical gaps. Maintain a respectful but firm debate tone."""
+
+    else:  # closing
+        prompt = f"""You are an expert AI debater giving a closing counter-argument.
+Motion: {topic}
+Your Role: Opposition (summarizing why the user's position is weaker)
+
+USER'S CLOSING ARGUMENT:
+{user_argument}
+{history_context}
+
+Generate a powerful closing counter-argument (max 200 words) that:
+1. Summarizes the key weaknesses in the user's overall position
+2. Highlights the strongest points from your counter-arguments
+3. Makes a compelling final case for the opposing view
+
+Be persuasive and conclusive."""
+
+    response = llm.invoke(prompt)
+    content = response.content
+    counter_text = str(content) if not isinstance(content, str) else content
+    
+    # Split into points for structured display
+    points = []
+    paragraphs = counter_text.strip().split('\n\n')
+    for i, para in enumerate(paragraphs):
+        if para.strip():
+            points.append({
+                "id": i + 1,
+                "text": para.strip()
+            })
+    
+    # If no clear paragraphs, treat whole response as one point
+    if not points:
+        points = [{"id": 1, "text": counter_text.strip()}]
+    
+    return {
+        "counter_argument": counter_text,
+        "points": points
+    }
