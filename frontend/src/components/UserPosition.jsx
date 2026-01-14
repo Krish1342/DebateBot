@@ -39,7 +39,6 @@ function UserPosition({ currentRound, arguments: userArgs, onSubmit, onNextRound
                     <div key={arg.id} className="statement-card">
                         <div className="statement-header">
                             <span className="statement-label">{ROUND_LABELS[currentRound]}</span>
-                            <span className="statement-preview">Preview</span>
                         </div>
                         <div className="statement-content">
                             <span className="point-label">Point {index + 1}</span>

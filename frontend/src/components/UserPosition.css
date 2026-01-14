@@ -79,17 +79,6 @@
     color: var(--cyan-primary);
 }
 
-.statement-preview {
-    font-size: 0.65rem;
-    color: var(--text-muted);
-    padding: 0.3rem 0.65rem;
-    background: rgba(6, 182, 212, 0.1);
-    border-radius: 20px;
-    border: 1px solid rgba(6, 182, 212, 0.2);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
 .statement-content {
     padding: 1.25rem;
 }

@@ -31,6 +31,14 @@
   --font-heading: "Space Grotesk", -apple-system, BlinkMacSystemFont, sans-serif;
   --font-body: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont,
     sans-serif;
+
+  /* Unified Layout System */
+  --container-max-width: 900px;
+  --container-padding: 1.5rem;
+  --section-spacing: 2rem;
+  --card-radius: 16px;
+  --input-radius: 14px;
+  --btn-radius: 12px;
 }
 
 body {
@@ -82,6 +90,7 @@ html {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -92,6 +101,7 @@ html {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -103,6 +113,7 @@ html {
     opacity: 0;
     transform: translateY(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -114,6 +125,7 @@ html {
     opacity: 0;
     transform: translateX(-30px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -125,6 +137,7 @@ html {
     opacity: 0;
     transform: translateX(30px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -136,6 +149,7 @@ html {
     opacity: 0;
     transform: scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -143,10 +157,12 @@ html {
 }
 
 @keyframes pulse {
+
   0%,
   100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.5;
   }
@@ -156,26 +172,31 @@ html {
   0% {
     background-position: -200% 0;
   }
+
   100% {
     background-position: 200% 0;
   }
 }
 
 @keyframes glow {
+
   0%,
   100% {
     box-shadow: 0 0 5px var(--cyan-glow), 0 0 10px var(--cyan-glow);
   }
+
   50% {
     box-shadow: 0 0 20px var(--cyan-glow), 0 0 30px var(--cyan-glow);
   }
 }
 
 @keyframes float {
+
   0%,
   100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-5px);
   }

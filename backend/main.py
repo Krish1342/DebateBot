@@ -19,13 +19,14 @@ origins = [
     "http://127.0.0.1:5174",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "http://localhost:8000",
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],  # Allow all origins for development
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
 
@@ -41,35 +42,61 @@ def generate_argument(topic: str, side: str, stage: str, history: str = "") -> s
     """Generate a debate argument for a given side and stage."""
     
     if stage == "opening":
-        prompt = f"""You are a world-class debater participating in a formal debate.
+        prompt = f"""You are presenting the {side} position in a formal debate.
 Motion: {topic}
-Your Stance: {side}
 
-Write a compelling, concise opening statement (max 150 words).
-Present 2-3 clear, distinct arguments. Be persuasive and articulate."""
+Write a strong opening statement (max 150 words) with 2-3 distinct arguments.
+
+IMPORTANT RULES:
+- Do NOT start with "Ladies and gentlemen" or similar greetings
+- Do NOT use phrases like "I believe" or "In my opinion"
+- Present arguments as factual claims with evidence
+- Use a direct, assertive tone
+- Jump straight into your first point
+
+Example format:
+"[First key claim]. [Supporting evidence or reasoning]. [Second point with evidence]. [Third point if needed]."
+"""
     
     elif stage == "rebuttal":
-        opponent = "Opposition" if side == "Proposition" else "Proposition"
-        prompt = f"""You are a world-class debater.
+        prompt = f"""You are presenting a rebuttal for the {side} position in a formal debate.
 Motion: {topic}
-Your Stance: {side}
 
-OPPONENT'S ARGUMENTS:
+Arguments to counter:
 {history}
 
-Write a sharp rebuttal (max 150 words) countering the opponent's points. 
-Address their specific arguments and provide counter-evidence."""
+Write a sharp rebuttal (max 150 words) addressing the opposing points.
+
+IMPORTANT RULES:
+- Do NOT start with "While my opponent" or "My opponent claims"
+- Do NOT use "the opposition" or "they argue"
+- Instead, directly state why each claim is flawed
+- Present counter-evidence factually
+- Use phrases like "This overlooks...", "The evidence shows...", "In reality..."
+
+Example format:
+"The claim that [X] fails to account for [Y]. [Counter-evidence]. Furthermore, [next counter-point with evidence]."
+"""
     
     else:  # closing
-        prompt = f"""You are a world-class debater giving your closing argument.
+        prompt = f"""You are delivering a closing statement for the {side} position.
 Motion: {topic}
-Your Stance: {side}
 
-DEBATE SO FAR:
+Debate context:
 {history}
 
-Write a powerful closing statement (max 150 words).
-Summarize your strongest points and make a final appeal."""
+Write a powerful closing (max 150 words) summarizing your strongest points.
+
+IMPORTANT RULES:
+- Do NOT start with "In conclusion" or "To summarize"
+- Do NOT use "Ladies and gentlemen" or "As I have shown"
+- Make a final compelling case with your best evidence
+- End with a strong declarative statement
+- Be assertive and confident
+
+Example format:
+"[Restate strongest point]. [Key evidence that proves your case]. [Why this matters]. [Strong final statement]."
+"""
     
     response = llm.invoke(prompt)
     content = response.content
@@ -170,61 +197,70 @@ async def generate_counter(request: LiveDebateRequest):
     # Build history context
     history_context = ""
     if history:
-        history_context = "\n\nPREVIOUS EXCHANGES:\n"
+        history_context = "\n\nPrevious points in this debate:\n"
         for item in history:
             if item.get("type") == "user":
-                history_context += f"USER'S ARGUMENT: {item.get('text', '')}\n"
+                history_context += f"PRO: {item.get('text', '')}\n"
             else:
-                history_context += f"AI COUNTER: {item.get('text', '')}\n"
+                history_context += f"CON: {item.get('text', '')}\n"
     
     # Generate counter-argument based on round
     if round_type == "opening":
-        prompt = f"""You are an expert AI debater analyzing and countering arguments.
+        prompt = f"""You are presenting the Opposition position in a live debate.
 Motion: {topic}
-Your Role: Opposition (countering the user's position)
 
-USER'S OPENING ARGUMENT:
+Argument to counter:
 {user_argument}
 {history_context}
 
-Generate a compelling counter-argument (max 200 words) that:
-1. Acknowledges the user's point briefly
-2. Presents clear counter-evidence or reasoning  
-3. Explains why the opposing view is stronger
+Write a counter-argument (max 200 words) that directly challenges this position.
 
-Be analytical, respectful, and persuasive. Write in a formal debate style."""
+IMPORTANT RULES:
+- Do NOT refer to "the user" or "my opponent" or "the speaker"
+- Do NOT start with greetings or "I would argue"
+- Present counter-points as factual claims
+- Use evidence and logical reasoning
+- Directly address and refute the specific claims made
+
+Format: Jump straight into your counter-arguments. State facts and evidence."""
 
     elif round_type == "rebuttal":
-        prompt = f"""You are an expert AI debater in a rebuttal round.
+        prompt = f"""You are presenting a rebuttal in a live debate.
 Motion: {topic}
-Your Role: Opposition (countering the user's position)
 
-USER'S REBUTTAL ARGUMENT:
+Argument to counter:
 {user_argument}
 {history_context}
 
-Generate a sharp rebuttal (max 200 words) that:
-1. Directly addresses the user's specific points
-2. Identifies weaknesses in their reasoning
-3. Reinforces your counter-position with evidence
+Write a rebuttal (max 200 words) that dismantles this argument.
 
-Be analytical and point out logical gaps. Maintain a respectful but firm debate tone."""
+IMPORTANT RULES:
+- Do NOT use "the user", "my opponent", "the previous speaker"
+- Do NOT start with "While..." or "Although..."
+- Identify specific flaws in the reasoning
+- Provide counter-evidence directly
+- Use phrases like "This fails because...", "The evidence contradicts...", "In fact..."
+
+Format: Directly address each claim with counter-evidence."""
 
     else:  # closing
-        prompt = f"""You are an expert AI debater giving a closing counter-argument.
+        prompt = f"""You are delivering a closing counter-argument in a live debate.
 Motion: {topic}
-Your Role: Opposition (summarizing why the user's position is weaker)
 
-USER'S CLOSING ARGUMENT:
+Final argument to counter:
 {user_argument}
 {history_context}
 
-Generate a powerful closing counter-argument (max 200 words) that:
-1. Summarizes the key weaknesses in the user's overall position
-2. Highlights the strongest points from your counter-arguments
-3. Makes a compelling final case for the opposing view
+Write a closing counter-argument (max 200 words).
 
-Be persuasive and conclusive."""
+IMPORTANT RULES:
+- Do NOT use "In conclusion" or "To summarize"
+- Do NOT refer to "the user" or "my opponent"
+- Highlight the key weaknesses exposed in this debate
+- Make a final compelling case for your position
+- End with a strong declarative statement
+
+Format: Present your strongest counter-points with evidence. End powerfully."""
 
     response = llm.invoke(prompt)
     content = response.content
@@ -261,62 +297,47 @@ async def score_argument(request: ScoringRequest):
     argument = request.argument
     topic = request.topic
     
-    # Use LLM to analyze the argument and generate scores
-    scoring_prompt = f"""You are an expert debate judge analyzing an argument. Evaluate the following argument on the given topic.
+    # Use LLM to analyze the argument with specific quotes
+    scoring_prompt = f"""You are an expert debate judge. Analyze this argument IN DETAIL.
 
 TOPIC: {topic}
 
-ARGUMENT:
-{argument}
+ARGUMENT TO ANALYZE:
+"{argument}"
 
-Analyze this argument and provide scores (as decimal numbers between 0 and 1) for:
-
-1. COHERENCE (0-1): How well do the sentences flow together? Are ideas connected logically?
-2. RELEVANCE (0-1): How relevant is the argument to the debate topic?
-3. EVIDENCE_STRENGTH (0-1): Does the argument use evidence, facts, or logical reasoning? How credible is the support?
-4. FALLACY_PENALTY (0-1): Are there logical fallacies? (0 = no fallacies, higher = more/worse fallacies)
-
-Also identify:
-- Number of distinct points/sentences in the argument
-- Number of evidence pieces or factual claims used
-- List any logical fallacies detected (e.g., "Ad Hominem", "Straw Man", "Appeal to Authority", etc.)
+Provide a thorough analysis with SPECIFIC QUOTES from the argument. For each metric, cite exactly which phrases led to your score.
 
 Respond in this EXACT JSON format:
 {{
     "coherence": 0.XX,
+    "coherence_reason": "Quote the specific phrases that show good/poor flow. Example: 'The transition from X to Y was abrupt' or 'The phrase \"therefore\" effectively connects ideas'",
     "relevance": 0.XX,
+    "relevance_reason": "Quote which parts directly address the topic and which parts drift off-topic",
     "evidence_strength": 0.XX,
+    "evidence_reason": "List the specific evidence/facts cited. If none: 'No concrete evidence provided - claims like \"X\" lack supporting data'",
     "fallacy_penalty": 0.XX,
+    "fallacy_reason": "Quote the exact phrases containing fallacies, or say 'No fallacies detected'",
     "sentence_count": N,
     "evidence_count": N,
-    "fallacies": ["fallacy1", "fallacy2"] or []
+    "fallacies": ["specific fallacy with quote"] or [],
+    "strongest_point": "Quote the single best sentence/argument",
+    "weakest_point": "Quote the sentence that needs most improvement and explain why"
 }}
 
-Provide only the JSON, no other text."""
+Be specific. Quote exact phrases. Don't give generic feedback."""
 
     try:
         response = llm.invoke(scoring_prompt)
         content = response.content
         
-        # Parse the JSON response
         import json
         import re
         
-        # Extract JSON from response
         json_match = re.search(r'\{[\s\S]*\}', str(content))
         if json_match:
             scores = json.loads(json_match.group())
         else:
-            # Fallback to default scores if parsing fails
-            scores = {
-                "coherence": 0.7,
-                "relevance": 0.7,
-                "evidence_strength": 0.6,
-                "fallacy_penalty": 0.1,
-                "sentence_count": len(argument.split('.')),
-                "evidence_count": 0,
-                "fallacies": []
-            }
+            raise ValueError("Could not parse scoring response")
         
         # Ensure all values are within bounds
         scores["coherence"] = max(0, min(1, float(scores.get("coherence", 0.7))))
@@ -325,7 +346,6 @@ Provide only the JSON, no other text."""
         scores["fallacy_penalty"] = max(0, min(1, float(scores.get("fallacy_penalty", 0.1))))
         
         # Calculate argument strength using weighted sum
-        # S = w1*C + w2*R + w3*E - w4*F
         w1, w2, w3, w4 = 0.25, 0.30, 0.30, 0.15
         argument_strength = (
             w1 * scores["coherence"] +
@@ -337,10 +357,16 @@ Provide only the JSON, no other text."""
         
         return {
             "coherence": scores["coherence"],
+            "coherenceReason": scores.get("coherence_reason", ""),
             "relevance": scores["relevance"],
+            "relevanceReason": scores.get("relevance_reason", ""),
             "evidenceStrength": scores["evidence_strength"],
+            "evidenceReason": scores.get("evidence_reason", ""),
             "fallacyPenalty": scores["fallacy_penalty"],
+            "fallacyReason": scores.get("fallacy_reason", ""),
             "argumentStrength": argument_strength,
+            "strongestPoint": scores.get("strongest_point", ""),
+            "weakestPoint": scores.get("weakest_point", ""),
             "details": {
                 "sentenceCount": scores.get("sentence_count", len(argument.split('.'))),
                 "evidenceCount": scores.get("evidence_count", 0),
@@ -350,13 +376,18 @@ Provide only the JSON, no other text."""
         
     except Exception as e:
         print(f"Error scoring argument: {e}")
-        # Return fallback scores on error
         return {
             "coherence": 0.7,
+            "coherenceReason": "Unable to analyze - please try again",
             "relevance": 0.7,
+            "relevanceReason": "Unable to analyze - please try again",
             "evidenceStrength": 0.6,
+            "evidenceReason": "Unable to analyze - please try again",
             "fallacyPenalty": 0.1,
+            "fallacyReason": "Unable to analyze - please try again",
             "argumentStrength": 0.72,
+            "strongestPoint": "",
+            "weakestPoint": "",
             "details": {
                 "sentenceCount": len(argument.split('.')),
                 "evidenceCount": 0,

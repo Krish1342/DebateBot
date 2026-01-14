@@ -1,43 +1,43 @@
 .debate-input-container {
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 2rem;
-  animation: fadeInUp 0.6s ease-out;
+  padding: 3rem 2rem;
+  animation: fadeIn 0.5s ease-out;
 }
 
+/* Form - Full width card */
 .debate-form {
-  margin-bottom: 2.5rem;
+  background: linear-gradient(135deg, rgba(17, 24, 39, 0.8) 0%, rgba(13, 20, 32, 0.9) 100%);
+  border: 1px solid var(--border-color);
+  border-radius: var(--card-radius);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
 }
 
+.debate-form:hover {
+  border-color: rgba(6, 182, 212, 0.3);
+  box-shadow: 0 8px 32px rgba(6, 182, 212, 0.1);
+}
+
+/* Input wrapper - clean flex layout */
 .input-wrapper {
   display: flex;
   align-items: flex-end;
   gap: 1rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: 16px;
-  padding: 0.5rem;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-}
-
-.input-wrapper:focus-within {
-  border-color: var(--cyan-primary);
-  box-shadow: 0 0 0 3px var(--cyan-glow), 0 8px 30px rgba(6, 182, 212, 0.15);
-  transform: translateY(-2px);
 }
 
 .topic-input {
   flex: 1;
-  background: transparent;
-  border: none;
-  padding: 1.15rem 1.25rem;
-  font-size: 1.05rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--input-radius);
+  padding: 1.1rem 1.35rem;
+  font-size: 1rem;
   color: var(--text-primary);
-  outline: none;
   font-family: var(--font-body);
-  position: relative;
-  z-index: 1;
+  outline: none;
+  transition: all 0.3s ease;
   min-height: 56px;
   max-height: 150px;
   resize: none;
@@ -47,18 +47,18 @@
 
 .topic-input::placeholder {
   color: var(--text-muted);
-  transition: color 0.2s ease;
 }
 
-.topic-input:focus::placeholder {
-  color: var(--text-secondary);
+.topic-input:focus {
+  border-color: var(--cyan-primary);
+  box-shadow: 0 0 0 3px var(--cyan-glow), 0 8px 30px rgba(6, 182, 212, 0.12);
 }
 
 .start-btn {
-  padding: 1rem 2rem;
+  padding: 1.1rem 2.25rem;
   background: var(--gradient-cyan);
   border: none;
-  border-radius: 12px;
+  border-radius: var(--btn-radius);
   color: white;
   font-family: var(--font-heading);
   font-size: 1rem;
@@ -66,16 +66,12 @@
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
-  position: relative;
-  z-index: 2;
-  letter-spacing: 0.02em;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 15px var(--cyan-glow);
 }
 
 .start-btn:hover:not(:disabled) {
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 10px 30px var(--cyan-glow), 0 0 50px rgba(6, 182, 212, 0.25);
-  background: linear-gradient(135deg, #0ea5e9, #06b6d4, #22d3ee);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 30px var(--cyan-glow);
 }
 
 .start-btn:active:not(:disabled) {
@@ -83,15 +79,18 @@
 }
 
 .start-btn:disabled {
-  opacity: 0.4;
+  opacity: 0.5;
   cursor: not-allowed;
-  filter: grayscale(30%);
+  box-shadow: none;
 }
 
-/* Sample Topics */
+/* Sample Topics - Full width */
 .sample-topics {
-  text-align: center;
-  animation: fadeIn 0.6s ease-out 0.2s backwards;
+  background: linear-gradient(135deg, rgba(17, 24, 39, 0.6) 0%, rgba(13, 20, 32, 0.7) 100%);
+  border: 1px solid var(--border-color);
+  border-radius: var(--card-radius);
+  padding: 1.5rem 2rem;
+  backdrop-filter: blur(8px);
 }
 
 .sample-label {
@@ -99,36 +98,26 @@
   font-size: 0.9rem;
   margin-bottom: 1.25rem;
   font-weight: 500;
+  text-align: center;
 }
 
 .topics-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.85rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
 }
 
 .sample-topic-btn {
-  padding: 1.15rem 1.25rem;
   background: var(--bg-card);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border-radius: var(--btn-radius);
+  padding: 1rem 1.25rem;
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   text-align: left;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-family: var(--font-body);
-  position: relative;
-  overflow: hidden;
-}
-
-.sample-topic-btn::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--gradient-cyan);
-  opacity: 0;
-  transition: opacity 0.3s ease;
 }
 
 .sample-topic-btn:hover {
@@ -139,42 +128,39 @@
   box-shadow: 0 6px 20px rgba(6, 182, 212, 0.15);
 }
 
-.sample-topic-btn:hover::before {
-  opacity: 0.05;
-}
-
-.sample-topic-btn:active {
-  transform: translateY(-1px);
-}
-
 /* Staggered animation for topic buttons */
 .sample-topic-btn:nth-child(1) {
   animation: fadeInUp 0.4s ease-out 0.1s backwards;
 }
+
 .sample-topic-btn:nth-child(2) {
   animation: fadeInUp 0.4s ease-out 0.15s backwards;
 }
+
 .sample-topic-btn:nth-child(3) {
   animation: fadeInUp 0.4s ease-out 0.2s backwards;
 }
+
 .sample-topic-btn:nth-child(4) {
   animation: fadeInUp 0.4s ease-out 0.25s backwards;
 }
 
 /* Responsive */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .debate-input-container {
-    padding: 1rem;
+    padding: 2rem 1rem;
+  }
+
+  .debate-form {
+    padding: 1.5rem;
   }
 
   .input-wrapper {
     flex-direction: column;
-    padding: 0.75rem;
   }
 
   .start-btn {
     width: 100%;
-    padding: 1.15rem;
   }
 
   .topics-grid {
