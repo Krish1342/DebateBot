@@ -3,7 +3,7 @@
     "rewrites": [
         {
             "source": "/api/(.*)",
-            "destination": "https://your-backend-url.onrender.com/api/$1"
+            "destination": "https://debatebot-5916.onrender.com/api/$1"
         },
         {
             "source": "/(.*)",
