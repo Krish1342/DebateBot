@@ -41,6 +41,12 @@ function Navbar() {
                         to="/"
                         className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
                     >
+                        Home
+                    </NavLink>
+                    <NavLink
+                        to="/debate"
+                        className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
+                    >
                         AI Debate
                     </NavLink>
                     <NavLink

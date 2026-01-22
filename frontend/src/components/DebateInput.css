@@ -1,6 +1,8 @@
 .debate-input-container {
   padding: 3rem 2rem;
   animation: fadeIn 0.5s ease-out;
+  position: relative;
+  z-index: 1;
 }
 
 /* Form - Full width card */

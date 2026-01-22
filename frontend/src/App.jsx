@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import LandingPage from "./components/LandingPage";
 import DebateInput from "./components/DebateInput";
 import DebateArena from "./components/DebateArena";
 import LiveDebateArena from "./components/LiveDebateArena";
@@ -49,8 +50,9 @@ function App() {
       <Navbar />
 
       <Routes>
+        <Route path="/" element={<LandingPage />} />
         <Route
-          path="/"
+          path="/debate"
           element={
             <>
               <header className="header">
